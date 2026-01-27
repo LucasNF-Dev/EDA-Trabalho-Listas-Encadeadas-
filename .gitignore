@@ -1,0 +1,14 @@
+# Arquivos compilados
+*.o
+*.out
+*.exe
+a.out
+
+# Pasta de build
+build/
+
+# VS Code
+.vscode/
+
+# Sistema operacional
+.DS_Store
