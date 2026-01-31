@@ -12,3 +12,6 @@ build/
 
 # Sistema operacional
 .DS_Store
+
+# Arquivos dos dados salvos
+*.txt

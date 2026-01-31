@@ -1,7 +1,8 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-void imprimeOi();
+
+void retirar_enter(char *str);
 
 
 #endif

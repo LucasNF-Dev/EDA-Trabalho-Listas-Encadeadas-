@@ -21,9 +21,18 @@ Cliente *criar_cliente(char *cpf,char *nome, char *telefone){
 
 
 void inserir_cliente(Cliente **listaCliente, char *cpf,char *nome, char *telefone ){
+    
+    if (existe_cliente(*listaCliente,cpf)==1)
+    {
+        printf("cpf ja utilizado\n");
+        return;
+    }
+        
+    
     Cliente *novo = criar_cliente(cpf,nome,telefone);
     novo->prox = *listaCliente;
     *listaCliente = novo;
+    printf("Cliente inserido com sucesso\n");
 }
 
 void imprimir_clientes(Cliente *listaCliente){
@@ -50,7 +59,7 @@ Cliente *retornar_cliente(Cliente *listaCliente, char *cpf){
     return aux;
 }
 
-void *excluir_cliente(Cliente **listaCliente, char *cpf){
+void excluir_cliente(Cliente **listaCliente, char *cpf){
     Cliente *aux = *listaCliente;
     Cliente *anterior = NULL;
     while (aux != NULL && strcmp(aux->cpf,cpf)!= 0 )
@@ -61,17 +70,71 @@ void *excluir_cliente(Cliente **listaCliente, char *cpf){
     if (aux == NULL)
     {
         printf("cpf não encotrado\n");
-        exit(1);
+        return ;
     }
     //se é o primeiro elemento da lista
     if (anterior == NULL)
     {
-        *listaCliente == aux->prox;
+        *listaCliente = aux->prox;
     }
     //se é algum elemento a partir do segundo
     else{
         anterior->prox = aux->prox;
     }
     free(aux);
+    printf("Cliente removido com sucesso\n");
 
+}
+
+int existe_cliente(Cliente *listaCliente, char *cpf){
+    Cliente *aux = listaCliente;
+    while (aux != NULL && strcmp(aux->cpf,cpf)!= 0 )
+    {
+        aux = aux->prox;
+    }
+    if (aux == NULL)
+    {
+        return 0;
+    }
+    return 1;
+}
+
+void alterar_cliente(Cliente **listaCliente, char *cpf,char *nome, char *telefone ){
+    Cliente *cliente=retornar_cliente(*listaCliente,cpf);
+    if (cliente==NULL)
+    {
+        printf("cpf não encontrado\n");
+        return;
+    }
+    strcpy(cliente->nome ,nome);
+    strcpy(cliente->telefone ,telefone);
+    printf("Cliente alterado com sucesso\n");
+}
+
+void destruir_lista_clientes(Cliente *listaCliente){
+    Cliente *aux;
+    while (listaCliente != NULL)
+    {
+        aux = listaCliente;
+        listaCliente = aux->prox;
+        free(aux);
+    }
+    
+}
+
+int imprimir_cliente(Cliente *listaCliente,char *cpf){
+    Cliente *cliente = retornar_cliente(listaCliente,cpf);
+    if (cliente != NULL)
+    {
+        printf("---------------------\n");
+        printf("CPF : %s\n",cliente->cpf);
+        printf("Nome : %s\n",cliente->nome);
+        printf("Telefone : %s\n",cliente->telefone);
+        printf("---------------------\n");
+        return 1;
+    }
+    else{
+        printf("CPF não encontrado\n");
+        return 0;
+    }
 }
