@@ -8,7 +8,7 @@ Cliente *criar_cliente(char *cpf,char *nome, char *telefone){
     Cliente *novo = malloc(sizeof(Cliente));
     if (novo == NULL)
     {
-        printf("erro ao alocar memória\n");
+        printf("Erro ao alocar memória\n");
         return NULL;
     }
     strcpy(novo->cpf ,cpf);
@@ -23,7 +23,7 @@ void inserir_cliente(Cliente **listaCliente, char *cpf,char *nome, char *telefon
     
     if (existe_cliente(*listaCliente,cpf)==1)
     {
-        printf("cpf ja utilizado\n");
+        printf("CPF ja utilizado\n");
         return;
     }
         
@@ -71,7 +71,7 @@ void excluir_cliente(Cliente **listaCliente, char *cpf){
     }
     if (aux == NULL)
     {
-        printf("cpf não encotrado\n");
+        printf("CPF não encontrado\n");
         return ;
     }
     //se é o primeiro elemento da lista
@@ -105,7 +105,7 @@ void alterar_cliente(Cliente **listaCliente, char *cpf,char *nome, char *telefon
     Cliente *cliente=retornar_cliente(*listaCliente,cpf);
     if (cliente==NULL)
     {
-        printf("cpf não encontrado\n");
+        printf("CPF não encontrado\n");
         return;
     }
     strcpy(cliente->nome ,nome);
@@ -121,7 +121,6 @@ void destruir_lista_clientes(Cliente *listaCliente){
         listaCliente = aux->prox;
         free(aux);
     }
-    
 }
 
 int imprimir_cliente(Cliente *listaCliente,char *cpf){

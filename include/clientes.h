@@ -37,4 +37,6 @@ void excluir_cliente(Cliente **listaCliente, char *cpf);
 //libera a area de memoria da lista de clientes
 void destruir_lista_clientes(Cliente *listaCliente);
 
+
+
 #endif

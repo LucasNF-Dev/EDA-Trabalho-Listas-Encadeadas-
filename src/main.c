@@ -3,29 +3,6 @@
 #include "util.h"
 #include "clientes.h"
 
-
-void menu_principal(){
-    printf("**********************\n");
-    printf("*** MENU PRINCIPAL ***\n");
-    printf("**********************\n");
-    printf("1 - Gerenciamento de Clientes\n");
-    printf("2 - Gerenciamento de Produtos\n");
-    printf("3 - Modo Compra\n");
-    printf("0 - Sair\n");
-}
-
-void menu_cliente(){
-    printf("********************\n");
-    printf("*** MENU CLIENTE ***\n");
-    printf("********************\n");
-    printf("1 - Cadastrar cliente\n");
-    printf("2 - Listar todos os clientes\n");
-    printf("3 - Buscar cliente\n");
-    printf("4 - Editar dados de um cliente\n");
-    printf("5 - Remover cliente\n");
-    printf("0 - Voltar ao menu principal\n");
-}
-
 int main(){
     Cliente *listaCliente = NULL;
     int opcao_menu_principal = -1;
@@ -76,7 +53,6 @@ int main(){
                     fgets(cpf,sizeof(cpf),stdin);
                     retirar_enter(cpf);
                     imprimir_cliente(listaCliente,cpf);
-
                     break;
 
                 case 4:
@@ -95,7 +71,6 @@ int main(){
                         retirar_enter(telefone);
                         alterar_cliente(&listaCliente,cpf,nome,telefone);
                     }
-                    
                     break;
 
                 case 5:
@@ -115,17 +90,92 @@ int main(){
                     printf("Opção inválida\n");;
                 }
             }
+            break;
 
         case 2 :
-            printf("Menu produto...\n");
+            int opcao_menu_produto = -1;
+            while (opcao_menu_produto != 0)
+            {
+                menu_produto();
+                scanf("%d",&opcao_menu_produto);
+                getchar();
+                switch (opcao_menu_produto)
+                {
+                case 1:
+                    limpar_tela();
+                    printf("Incluindo produto...\n");
+                    break;
+
+                case 2:
+                    limpar_tela();
+                    printf("Listando produtos...\n");
+                    break;
+                
+                case 3:
+                    limpar_tela();
+                    printf("Buscando produto...\n");
+                    break;
+
+                case 4:
+                    limpar_tela();
+                    printf("Editando produto...\n");
+                    break;
+
+                case 5:
+                    limpar_tela();
+                    printf("Removendo produto...\n");
+                    break;
+                
+                case 0:
+                    limpar_tela();
+                    break;
+                
+                default:
+                    printf("Opção inválida\n");;
+                }
+            }
             break;
+
         case 3 :
-            printf("Carrinho de compra...\n");
-            break;    
+            int opcao_menu_carrinho = -1;
+            while (opcao_menu_carrinho != 0)
+            {
+                menu_carrinho();
+                scanf("%d",&opcao_menu_carrinho);
+                getchar();
+                switch (opcao_menu_carrinho)
+                {
+                case 1:
+                    limpar_tela();
+                    printf("Incluindo um produto no carrinho de um cliente...\n");
+                    break;
+
+                case 2:
+
+                    limpar_tela();
+                    printf("Listando todos os produtos do carrinho de um cliente...\n");
+                    break;
+
+                case 3:
+                    limpar_tela();
+                    printf("Retirando todos os produtos do carrinho de um cliente...\n");
+                    break;
+
+                case 0:
+                    limpar_tela();
+                    break;
+                
+                default:
+                    printf("Opção inválida\n");;
+                }   
+            }
+            break;
+
         case 0 :
             printf("Encerrando...\n");
             destruir_lista_clientes(listaCliente);
             break;
+
         default:
             printf("Opção inválida\n");
         }
