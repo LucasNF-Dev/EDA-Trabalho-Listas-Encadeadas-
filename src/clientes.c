@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "util.h"
 
 
 Cliente *criar_cliente(char *cpf,char *nome, char *telefone){
@@ -38,6 +37,9 @@ void inserir_cliente(Cliente **listaCliente, char *cpf,char *nome, char *telefon
 void imprimir_clientes(Cliente *listaCliente){
     printf("---------------------\n");
     Cliente *aux = listaCliente;
+    if (aux==NULL){
+        printf("Nenhum cliente cadastrado\n");
+    }
     while (aux != NULL )
     {
         printf("CPF : %s\n",aux->cpf);

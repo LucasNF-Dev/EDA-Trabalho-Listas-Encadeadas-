@@ -13,8 +13,8 @@ void menu_principal(){
     printf("3 - Modo Compra\n");
     printf("0 - Sair\n");
 }
+
 void menu_cliente(){
- 
     printf("********************\n");
     printf("*** MENU CLIENTE ***\n");
     printf("********************\n");
@@ -28,28 +28,29 @@ void menu_cliente(){
 
 int main(){
     Cliente *listaCliente = NULL;
-    int opcao = -1;
-    while (opcao != 0)
+    int opcao_menu_principal = -1;
+    while (opcao_menu_principal != 0)
     {
         menu_principal();
-        scanf("%d",&opcao);
-        switch (opcao)
+        scanf("%d",&opcao_menu_principal);
+        switch (opcao_menu_principal)
         {
 
         case 1 :
-            int opcao_cliente = -1;
-            while (opcao_cliente != 0)
+            int opcao_menu_cliente = -1;
+            while (opcao_menu_cliente != 0)
             {
                 char cpf[20];
                 char nome[100];
                 char telefone[15];
                 menu_cliente();
-                scanf("%d",&opcao_cliente);
-                switch (opcao_cliente)
+                scanf("%d",&opcao_menu_cliente);
+                getchar();
+                switch (opcao_menu_cliente)
                 {
                 case 1:
-                    getchar();
-                    printf("Incluindo cliente\n");
+                    limpar_tela();
+                    printf("Incluindo cliente...\n");
                     printf("CPF: ");
                     fgets(cpf,sizeof(cpf),stdin);
                     retirar_enter(cpf);
@@ -63,13 +64,14 @@ int main(){
                     break;
                 
                 case 2:
-                    printf("Listando clientes\n");
+                    limpar_tela();
+                    printf("Listando clientes...\n");
                     imprimir_clientes(listaCliente);
                     break;
                 
                 case 3:
-                    getchar();
-                    printf("Buscando clientes\n");
+                    limpar_tela();
+                    printf("Buscando cliente...\n");
                     printf("CPF: ");
                     fgets(cpf,sizeof(cpf),stdin);
                     retirar_enter(cpf);
@@ -78,8 +80,8 @@ int main(){
                     break;
 
                 case 4:
-                    getchar();
-                    printf("Editando cliente\n");
+                    limpar_tela();
+                    printf("Editando cliente...\n");
                     printf("CPF: ");
                     fgets(cpf,sizeof(cpf),stdin);
                     retirar_enter(cpf);
@@ -97,8 +99,8 @@ int main(){
                     break;
 
                 case 5:
-                    getchar();
-                    printf("Removendo cliente\n");
+                    limpar_tela();
+                    printf("Removendo cliente...\n");
                     printf("CPF: ");
                     fgets(cpf,sizeof(cpf),stdin);
                     retirar_enter(cpf);
@@ -106,15 +108,13 @@ int main(){
                     break;
                 
                 case 0:
+                    limpar_tela();
                     break;
                 
                 default:
                     printf("Opção inválida\n");;
                 }
-                
             }
-            
-            
 
         case 2 :
             printf("Menu produto...\n");
