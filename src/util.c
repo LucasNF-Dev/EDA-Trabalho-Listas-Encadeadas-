@@ -51,11 +51,11 @@ void menu_produto(){
 }
 
 void menu_carrinho(){
-    printf("********************\n");
+    printf("*********************\n");
     printf("*** MENU CARRINHO ***\n");
-    printf("********************\n");
+    printf("*********************\n");
     printf("1 - Incluir um produto no carrinho de um cliente\n");
     printf("2 - Listar todos os produtos do carrinho de um cliente\n");
-    printf("3 - Retirar todos os produtos do carrinho de um cliente\n");
+    printf("3 - Retirar um produto do carrinho de um cliente\n");
     printf("0 - Voltar ao menu principal\n");
 }

@@ -20,7 +20,6 @@ void cadastrarProduto(Produto **lista) {
 
     printf("Quantidade: ");
     scanf("%d", &novo->quantidade);
-
     novo->prox = *lista;
     *lista = novo;
 
