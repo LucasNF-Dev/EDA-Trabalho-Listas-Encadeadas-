@@ -13,5 +13,5 @@ void adicionar_ao_carrinho(Cliente *cliente, int codigoProduto, int quantidade);
 //lista os produtos no carrinho do cliente
 void listar_carrinho(Cliente *cliente, Produto *listaProdutos);
 //remove um produto do carrinho do cliente
-void remover_do_carrinho(Cliente *cliente, int codigoProduto);
+void remover_do_carrinho(Cliente *cliente, int codigoProduto, int qtdParaRemover);
 #endif

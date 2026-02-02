@@ -3,24 +3,29 @@
 #include "produtos.h"
 
 void cadastrarProduto(Produto **lista) {
-    Produto *novo = malloc(sizeof(Produto));
-    if (!novo) {
-        printf("Erro de memoria!\n");
+    int codTemporario;
+    printf("Codigo: ");
+    scanf("%d", &codTemporario);
+    if(buscarProduto(*lista, codTemporario)!= NULL){
+        printf("Erro: Ja existe um produto com esse codigo!\n");
         return;
     }
-
-    printf("Codigo: ");
-    scanf("%d", &novo->codigo);
-
+    Produto *novo = (Produto *) malloc(sizeof(Produto));
+    if(novo == NULL){
+        printf("ERRO: de memoria \n");
+        return; 
+    }
+    novo->codigo = codTemporario;
     printf("Nome: ");
     scanf(" %[^\n]", novo->nome);
 
     printf("Preco: ");
-    scanf("%f", &novo->preco);
+    scanf(" %f ", &novo->preco);
 
     printf("Quantidade: ");
-    scanf("%d", &novo->quantidade);
-    novo->prox = *lista;
+    scanf(" %d", &novo->quantidade);
+
+    novo->prox = *lista; //todo produto adicionado vai sempre iniciar do comeco da lista
     *lista = novo;
 
     printf("Produto cadastrado com sucesso!\n");

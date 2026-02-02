@@ -43,3 +43,29 @@ void listar_carrinho(Cliente *cliente, Produto *listaProdutos){
         aux = aux->prox; 
     }
 }
+void remover_do_carrinho(Cliente *cliente, int codigoProduto, int qtdParaRemover){
+    ItemCarrinho *atual = cliente->carrinho;
+    ItemCarrinho *anterior = NULL;
+
+    while(atual != NULL && atual->codigoProduto != codigoProduto){        
+        anterior = atual;
+        atual = atual->prox;
+    }
+    if(atual == NULL){
+        printf("Produto nao encontrado no carrinho!\n");
+        return;
+    }
+    if(atual->quantidade > qtdParaRemover){
+        atual->quantidade = atual->quantidade - qtdParaRemover;
+        return;
+    }
+
+    if (anterior == NULL) {
+        cliente->carrinho = atual->prox; //PULA A CABECA E VAI PRO PROXIMO( ISSO NESSE CASO SERIA PQ O PRIMEIRO ELEMENTO SERIA O PRODUTO A SER REMOVIDO)
+    }
+    else{
+        anterior->prox = atual->prox;
+    }
+    free(atual);    
+    printf("Produto removido do carrinho!\n");  
+}
