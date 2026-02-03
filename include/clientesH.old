@@ -1,10 +1,12 @@
 #ifndef CLIENTES_H
 #define CLIENTES_H
+struct ItemCarrinho;
 typedef struct Cliente
 {
     char cpf[20];
     char nome[100];
     char telefone[15];
+    struct ItemCarrinho *carrinho;
     struct Cliente *prox;
     
 }Cliente;

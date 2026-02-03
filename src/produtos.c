@@ -1,104 +1,141 @@
+#include "produtos.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "produtos.h"
+#include <string.h>
 
-void cadastrarProduto(Produto **lista) {
-    int codTemporario;
-    printf("Codigo: ");
-    scanf("%d", &codTemporario);
-    if(buscarProduto(*lista, codTemporario)!= NULL){
-        printf("Erro: Ja existe um produto com esse codigo!\n");
+
+Produto *criar_produto(int codigo,char *nome, float preco){
+    Produto *novo = malloc(sizeof(Produto));
+    if (novo == NULL)
+    {
+        printf("Erro ao alocar memória\n");
+        return NULL;
+    }
+    novo->codigo=codigo;
+    strcpy(novo->nome ,nome);
+    novo->preco=preco;
+    novo->prox = NULL;
+    return novo;
+}
+
+
+void inserir_produto(Produto **listaProduto, int codigo,char *nome, float preco){
+    
+    if (existe_produto(*listaProduto,codigo)==1)
+    {
+        printf("Código de produto já utilizado\n");
         return;
     }
-    Produto *novo = (Produto *) malloc(sizeof(Produto));
-    if(novo == NULL){
-        printf("ERRO: de memoria \n");
-        return; 
-    }
-    novo->codigo = codTemporario;
-    printf("Nome: ");
-    scanf(" %[^\n]", novo->nome);
-
-    printf("Preco: ");
-    scanf(" %f ", &novo->preco);
-
-    printf("Quantidade: ");
-    scanf(" %d", &novo->quantidade);
-
-    novo->prox = *lista; //todo produto adicionado vai sempre iniciar do comeco da lista
-    *lista = novo;
-
-    printf("Produto cadastrado com sucesso!\n");
+        
+    
+    Produto *novo = criar_produto(codigo,nome,preco);
+    novo->prox = *listaProduto;
+    *listaProduto = novo;
+    printf("Produto inserido com sucesso\n");
 }
 
-void listarProdutos(Produto *lista) {
-    if (!lista) {
-        printf("Nenhum produto cadastrado.\n");
-        return;
+void imprimir_produtos(Produto *listaProduto){
+    printf("---------------------\n");
+    Produto *aux = listaProduto;
+    if (aux==NULL){
+        printf("Nenhum produto cadastrado\n");
     }
-
-    while (lista) {
-        printf("\nCodigo: %d", lista->codigo);
-        printf("\nNome: %s", lista->nome);
-        printf("\nPreco: %.2f", lista->preco);
-        printf("\nQuantidade: %d\n", lista->quantidade);
-        lista = lista->prox;
+    while (aux != NULL )
+    {
+        printf("Código : %d\n",aux->codigo);
+        printf("Nome : %s\n",aux->nome);
+        printf("Preço : %.2f\n",aux->preco);
+        printf("---------------------\n");
+        aux = aux->prox;
     }
+    
+    
 }
-Produto* buscarProduto(Produto *lista, int codigo) {
-    while (lista) {
-        if (lista->codigo == codigo)
-            return lista;
-        lista = lista->prox;
+
+Produto *retornar_produto(Produto *listaProduto, int codigo){
+    Produto *aux = listaProduto;
+    while (aux != NULL && aux->codigo!=codigo )
+    {
+        aux = aux->prox;
     }
-    return NULL;
+    return aux;
 }
-void editarProduto(Produto *lista) {
-    int codigo;
-    printf("Digite o codigo do produto: ");
-    scanf("%d", &codigo);
 
-    Produto *p = buscarProduto(lista, codigo);
-
-    if (!p) {
-        printf("Produto nao encontrado.\n");
-        return;
-    }
-
-    printf("Novo nome: ");
-    scanf(" %[^\n]", p->nome);
-
-    printf("Novo preco: ");
-    scanf("%f", &p->preco);
-
-    printf("Nova quantidade: ");
-    scanf("%d", &p->quantidade);
-
-    printf("Produto atualizado!\n");
-}
-void removerProduto(Produto **lista) {
-    int codigo;
-    printf("Codigo do produto a remover: ");
-    scanf("%d", &codigo);
-
-    Produto *atual = *lista;
+void excluir_produto(Produto **listaProduto, int codigo){
+    Produto *aux = *listaProduto;
     Produto *anterior = NULL;
-
-    while (atual && atual->codigo != codigo) {
-        anterior = atual;
-        atual = atual->prox;
+    while (aux != NULL && aux->codigo!=codigo)
+    {
+        anterior = aux;
+        aux = aux->prox;
     }
+    if (aux == NULL)
+    {
+        printf("Código de produto não encontrado\n");
+        return ;
+    }
+    //se é o primeiro elemento da lista
+    if (anterior == NULL)
+    {
+        *listaProduto = aux->prox;
+    }
+    //se é algum elemento a partir do segundo
+    else{
+        anterior->prox = aux->prox;
+    }
+    free(aux);
+    printf("Produto removido com sucesso\n");
 
-    if (!atual) {
-        printf("Produto nao encontrado.\n");
+}
+
+int existe_produto(Produto *listaProduto, int codigo){
+    Produto *aux = listaProduto;
+    while (aux != NULL && aux->codigo!=codigo )
+    {
+        aux = aux->prox;
+    }
+    if (aux == NULL)
+    {
+        return 0;
+    }
+    return 1;
+}
+
+void alterar_produto(Produto **listaProduto, int codigo,char *nome, float preco ){
+    Produto *produto=retornar_produto(*listaProduto,codigo);
+    if (produto==NULL)
+    {
+        printf("Código de produto não encontrado\n");
         return;
     }
+    strcpy(produto->nome ,nome);
+    produto->preco=preco;
+    printf("Produto alterado com sucesso\n");
+}
 
-    if (!anterior)
-        *lista = atual->prox;
-    else
-        anterior->prox = atual->prox;
+void destruir_lista_produtos(Produto *listaProduto){
+    Produto *aux;
+    while (listaProduto != NULL)
+    {
+        aux = listaProduto;
+        listaProduto = aux->prox;
+        free(aux);
+    }
+}
 
-    free(atual);
-    printf("Produto removido!\n");
+int imprimir_produto(Produto *listaProduto,int codigo){
+    Produto *produto = retornar_produto(listaProduto,codigo);
+    if (produto != NULL)
+    {
+        printf("---------------------\n");
+        printf("Código : %d\n",produto->codigo);
+        printf("Nome : %s\n",produto->nome);
+        printf("Preço : %.2f\n",produto->preco);
+        printf("---------------------\n");
+        return 1;
+    }
+    else{
+        printf("Código de produto não encontrado\n");
+        return 0;
+    }
 }

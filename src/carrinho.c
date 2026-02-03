@@ -1,71 +1,124 @@
 #include "carrinho.h"
 #include "clientes.h"
 #include "produtos.h"
-#include "util.h" 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-void adicionar_ao_carrinho(Cliente *cliente, int codigoProduto, int quantidade){
-    ItemCarrinho *novo = (ItemCarrinho *) malloc(sizeof(ItemCarrinho));
-    if(novo == NULL) {
+
+ItemCompra *criar_item_compra(char *cpfCliente,int codigoProduto, int quantidade){
+    ItemCompra *novo = malloc(sizeof(ItemCompra));
+    if (novo == NULL)
+    {
         printf("Erro ao alocar memória\n");
-        return;
+        return NULL;
     }
-    novo->codigoProduto = codigoProduto;
-    novo->quantidade = quantidade;
-    novo->prox = cliente->carrinho;
-    cliente->carrinho = novo;
-    printf("Item adicionado com sucesso!\n");
+    strcpy(novo->cpfCliente ,cpfCliente);
+    novo->codigoProduto=codigoProduto;
+    novo->quantidade=quantidade;
+    novo->prox = NULL;
 }
-void listar_carrinho(Cliente *cliente, Produto *listaProdutos){
-    ItemCarrinho *aux = cliente->carrinho; 
-    
-    if (aux == NULL) {
-        printf("Carrinho vazio!\n");
+
+
+void inserir_item_compra(ItemCompra **listaCompras, Cliente *listaCliente, Produto *listaProduto, char *cpfCliente,int codigoProduto, int quantidade ){
+
+    if (existe_cliente(listaCliente,cpfCliente)==0)
+    {
+        printf("CPF de cliente inexistente\n");
         return;
     }
 
-    printf("--- Carrinho do Cliente ---\n");
-
-    while(aux != NULL){ 
-
-        Produto *prod = buscarProduto(listaProdutos, aux->codigoProduto);
+    if (existe_produto(listaProduto,codigoProduto)==0)
+    {
+        printf("Código de produto inexistente\n");
+        return;
+    }
         
-        if (prod != NULL) {
-            printf("Produto: %s\n", prod->nome);
-            printf("Qtd: %d\n", aux->quantidade);
-            printf("Preço Unit: %.2f\n", prod->preco);
-            printf("-------------------\n");
-        } else {
-            printf("Produto código %d não encontrado no cadastro.\n", aux->codigoProduto);
+    
+    ItemCompra *novo = criar_item_compra(cpfCliente,codigoProduto,quantidade);
+    novo->prox = *listaCompras;
+    *listaCompras = novo;
+    printf("Item de compra inserido com sucesso\n");
+}
+
+
+//MELHORAR PARA TRAZER OUTROS DADOS DE CLIENTE E PRODUTO
+void imprimir_itens_compra_cliente(ItemCompra *listaCompras,Cliente *listaCliente, Produto *listaProduto, char *cpfCliente){
+    printf("---------------------\n");
+    ItemCompra *aux = listaCompras;
+    Cliente *cliente = retornar_cliente(listaCliente,cpfCliente);
+    Produto *produto = NULL;
+    if (cliente==NULL){
+        printf("CPF inexistente\n");
+        return;
+    }
+
+    if (aux==NULL){
+        printf("Nenhum item de compra cadastrado\n");
+    }
+    while (aux != NULL )
+    {
+        if (strcmp(aux->cpfCliente,cpfCliente)== 0){
+
+            produto=retornar_produto(listaProduto,aux->codigoProduto);
+
+            printf("CPF do cliente: %s\n",aux->cpfCliente);
+            printf("Nome do cliente: %s\n",cliente->nome);
+            printf("Código do produto: %d\n",aux->codigoProduto);
+            printf("Nome do produto: %s\n",produto->nome);
+            printf("Preço do produto: %.2f\n",produto->preco);
+            printf("Quantidade comprada : %d\n",aux->quantidade);
+            printf("Valor total da compra : %.2f\n",(aux->quantidade)*(produto->preco));
+            printf("---------------------\n");
         }
         
-        aux = aux->prox; 
+        aux = aux->prox;
     }
 }
-void remover_do_carrinho(Cliente *cliente, int codigoProduto, int qtdParaRemover){
-    ItemCarrinho *atual = cliente->carrinho;
-    ItemCarrinho *anterior = NULL;
 
-    while(atual != NULL && atual->codigoProduto != codigoProduto){        
-        anterior = atual;
-        atual = atual->prox;
+ItemCompra *retornar_item_compra(ItemCompra *listaCompras, char *cpfCliente, int codigoProduto){
+    ItemCompra *aux = listaCompras;
+    while (aux != NULL && (aux->codigoProduto!=codigoProduto || strcmp(aux->cpfCliente,cpfCliente)!= 0) )
+    {
+        aux = aux->prox;
     }
-    if(atual == NULL){
-        printf("Produto nao encontrado no carrinho!\n");
-        return;
-    }
-    if(atual->quantidade > qtdParaRemover){
-        atual->quantidade = atual->quantidade - qtdParaRemover;
-        return;
-    }
+    return aux;
+}
 
-    if (anterior == NULL) {
-        cliente->carrinho = atual->prox; //PULA A CABECA E VAI PRO PROXIMO( ISSO NESSE CASO SERIA PQ O PRIMEIRO ELEMENTO SERIA O PRODUTO A SER REMOVIDO)
+void excluir_item_compra(ItemCompra **listaCompras, char *cpfCliente, int codigoProduto){
+    ItemCompra *aux = *listaCompras;
+    ItemCompra *anterior = NULL;
+    while (aux != NULL && (aux->codigoProduto!=codigoProduto || strcmp(aux->cpfCliente,cpfCliente)!= 0) )
+    {
+        anterior = aux;
+        aux = aux->prox;
     }
+    if (aux == NULL)
+    {
+        printf("Item de compra não encontrado\n");
+        return ;
+    }
+    //se é o primeiro elemento da lista
+    if (anterior == NULL)
+    {
+        *listaCompras = aux->prox;
+    }
+    //se é algum elemento a partir do segundo
     else{
-        anterior->prox = atual->prox;
+        anterior->prox = aux->prox;
     }
-    free(atual);    
-    printf("Produto removido do carrinho!\n");  
+    free(aux);
+    printf("Item de compra removido com sucesso\n");
+
 }
+
+void destruir_lista_item_compra(ItemCompra *listaCompras){
+    ItemCompra *aux;
+    while (listaCompras != NULL)
+    {
+        aux = listaCompras;
+        listaCompras = aux->prox;
+        free(aux);
+    }
+}
+
