@@ -17,6 +17,7 @@ ItemCompra *criar_item_compra(char *cpfCliente,int codigoProduto, int quantidade
     novo->codigoProduto=codigoProduto;
     novo->quantidade=quantidade;
     novo->prox = NULL;
+    return novo;
 }
 
 
